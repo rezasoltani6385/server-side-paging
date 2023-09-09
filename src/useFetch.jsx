@@ -24,7 +24,7 @@ const useFetch = (url, sieveModel)=> {
 
     useEffect(()=>{
         getData()
-    }, [sieveModel.page])
+    }, [])
 
     return [loading, data]
 }

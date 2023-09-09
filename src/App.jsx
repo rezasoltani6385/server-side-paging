@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react"
-import useFetch from "./useFetch"
+import usePaginatedFetch from "./usePaginatedFetch"
 import Card from './components/card'
 import Pagination from "./components/pagination"
 
-const url = 'https://react-mini-projects-api.classbon.com/Programmer/sieve'
+const url = 'https://react-mini-projects-api.classbon.com/Programmer/programmers'
 
-const pageSize = 6
 function App() {
+  const [loading, data] = usePaginatedFetch(url, 3)
   const [page, setPage] = useState(1)
-  const [loading, programmers] = useFetch(url, {page, pageSize})
+  const [programmers, setProgrammers] = useState([])
 
+  useEffect(()=>{
+    if (loading) return
+    setProgrammers(data[page - 1])
+  }, [loading, page])
 
   return (
     <>
@@ -24,9 +28,9 @@ function App() {
         {
           !loading && (
             <div className="row d-flex justify-content-center">
-              {programmers.data.map(({id, ...programmer})=>{
+              {programmers.map(({id, ...programmer})=>{
                 return (
-                  <div className="col-4" key={id}>
+                  <div className="col-3">
                     <Card {...programmer}/>
                   </div>
                 )
@@ -36,11 +40,7 @@ function App() {
         }
       </div>
       <div className="row">
-        <Pagination
-          pages={Math.ceil(programmers.totalRecords / pageSize)}
-          setPage={setPage}
-          activePage={page}
-        />
+        <Pagination pages={data.length} setPage={setPage} activePage={page}/>
       </div>
     </>
   )
