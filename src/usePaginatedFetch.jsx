@@ -12,7 +12,7 @@ const usePaginatedFetch = (url, pageSize)=> {
         const data = await response.json()
 
         const paginatedData = _.chunk(data, pageSize)
-        console.log(paginatedData)
+        // console.log(paginatedData)
 
         setData(paginatedData)
         setLoading(false)
